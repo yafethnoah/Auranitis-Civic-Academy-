@@ -1,31 +1,44 @@
-import path from 'path'
-import { defineConfig, loadEnv } from 'vite'
+import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import path from 'path'
 
-export default defineConfig(({ mode }) => {
-  // اجعل التحميل من جذر المشروع حتى يقرأ .env بشكل صحيح محليًا
-  const env = loadEnv(mode, process.cwd(), '')
-
+export default defineConfig(() => {
   return {
-    // ✅ هذا هو المفتاح الأساسي لـ GitHub Pages (Project Pages)
+    /**
+     * IMPORTANT for GitHub Pages (project repo)
+     * Must match the repository name exactly
+     */
     base: '/Auranitis-Civic-Academy-/',
 
     plugins: [react()],
 
+    /**
+     * Dev server (used only locally or by GitHub Actions preview)
+     */
     server: {
       port: 3000,
       host: '0.0.0.0',
     },
 
-    // ملاحظة: لا تعتمد على env في GitHub Pages إلا إذا كنت تضعه وقت الـ build عبر Actions/Secrets
-    define: {
-      'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY || ''),
-      'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY || ''),
-    },
-
+    /**
+     * Path aliases
+     */
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
+      },
+    },
+
+    /**
+     * Build settings (safe defaults)
+     */
+    build: {
+      outDir: 'dist',
+      sourcemap: false,
+      rollupOptions: {
+        output: {
+          manualChunks: undefined,
+        },
       },
     },
   }
