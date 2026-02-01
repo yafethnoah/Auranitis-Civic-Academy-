@@ -33,7 +33,7 @@ jobs:
       - name: Build
         env:
           # Provide the key at build time so Vite embeds it into the client bundle
-          VITE_GEMINI_API_KEY: ${{ AIzaSyDdGHC-QipA_ZX3ffbH4YGnw7qMH0890CI }}
+          VITE_GEMINI_API_KEY: ${{ secrets.VITE_GEMINI_API_KEY }}
         run: npm run build
 
       - name: Upload artifact
